@@ -35,4 +35,9 @@ class Vehicle:
         ORDER BY start_price %(order)s ;
         """
         return connectToMySQL(DB).query_db(query)
+    @classmethod
+    def delete(cls, data):
+        query = """DELETE FROM vehicles WHERE id = %(id)s;"""
+        return connectToMySQL(DB).query_db(query,data)
+    
 
