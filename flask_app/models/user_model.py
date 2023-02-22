@@ -33,15 +33,56 @@ class User:
         return cls(result[0])
     
     @classmethod #! Update profile
-    def get_by_email(cls, data):
-        query = """UPDATE tv_shows SET title=%(title)s,
-                network=%(network)s,release_date=%(release_date)s,description=%(description)s
+    def update_profile(cls, data):
+        query = """UPDATE users SET first_name=%(first_name)s,
+                last_name=%(last_name)s,email=%(email)s,cin=%(cin)s,password=%(password)s
                 WHERE id=%(id)s;"""
         result= connectToMySQL(DB).query_db(query,data)
         if len(result)<1:
             return False
         return cls(result[0])
     
+    @classmethod
+    def add_favorite(cls,data):
+        query = "INSERT INTO favourites (user_id,vehicle_id) VALUES (%(user_id)s,%(vehicle_id)s);"
+        return connectToMySQL(DB).query_db(query,data)
+    @classmethod
+    def get_one_by_id(cls,data):
+        query = """SELECT * FROM users 
+        LEFT JOIN favourites ON users.id = favourites.user_id 
+        LEFT JOIN vehicles ON vehicles.id = favourites.vehicle_id 
+        WHERE users.id = %(id)s;
+                """
+        results = connectToMySQL(DB).query_db(query,data)
+
+        author = cls(results[0])
+        print("**************",results,"********************")
+        for row in results:
+            """ if row['authors.id'] == None:
+                break """
+            data = {
+                    "id":row["vehicles.id"],
+                    "admin_id":row["admin_id"],
+                    "product_type":row["product_type"],
+                    "mileage":row["mileage"],
+                    "age":row["age"],
+                    "transmission":row["transmission"],
+                    "fuel_type":row["fuel_type"],
+                    "power":row["power"],
+                    "seats":row["seats"],
+                    "vehicle_name":row["vehicle_name"],
+                    "description":row["description"],
+                    "photos":row["photos"],
+                    "start_price":row["start_price"],
+                    "auction_start_date":row["auction_start_date"],
+                    "auction_last_date":row["auction_last_date"],
+                    "created_at":row["created_at"],
+                    "uptated_at":data["uptated_at"]
+            }
+            user.favourite_vehicle.append(vehicle_model.Vehicle(data))
+            print("************111**",user,"********************")
+        return author
+
 
 
 
