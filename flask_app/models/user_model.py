@@ -129,3 +129,5 @@ class User:
             flash("Password and confirm_password must match!", "confirm_password")
             is_valid = False
         return is_valid
+    
+    
