@@ -14,10 +14,7 @@ def register():
     if not User.validate_user(request.form):
         return redirect('/')
     data={
-        'first_name': request.form['first_name'],
-        'last_name': request.form['last_name'],
-        'email': request.form['email'],
-        'cin': request.form['cin'],
+        **request.form,
         'password':bcrypt.generate_password_hash(request.form['password'])
     }
     user=User.register(data)
@@ -31,15 +28,23 @@ def home():
         return redirect('/')
     user= User.get_by_id({'id': session['user_id']})
     return render_template("home.html",user=user)
+    
 # ============= action route =============
 @app.route('/login', methods=['POST'])
 def login():
-    user_from_db = User.get_by_email(request.form)
-    if not user_from_db:
-        flash("invalid Email / Password", "email")
+    data = { "email" : request.form["email"] }
+    user_in_db = User.get_by_email(data)
+    if not user_in_db:
+        flash("Invalid Email/Password","email")
+        return redirect("/")
+    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
+        flash("Invalid Email/Password", "password")
         return redirect('/')
-    if not bcrypt.check_password_hash(user_from_db.password, request.form['password']):
-        flash("Invalid Email / Password", "password")
-        return redirect('/')
-    session['user_id'] = user_from_db.id
+    session['user_id'] = user_in_db.id
     return redirect('/home')
+
+    # ============= action route =============
+@app.route('/user/logout')
+def logout():
+    session.clear()
+    return redirect('/')
