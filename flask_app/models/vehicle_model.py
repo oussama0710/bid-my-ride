@@ -78,7 +78,50 @@ class Vehicle:
             }
             vehicle.users_who_favorited.append(user_model.User(data))
         return vehicle
-    
-    
+    @staticmethod 
+    def validate_vehicle(data):
+        is_valid = True
+        if len(data['product_type'])==0:
+            is_valid = False
+            flash("You must select type!", "product_type")
+        if len(data['mileage'])<2:
+            is_valid = False
+            flash("you must select mileage", "mileage")
+        if len(data['age'])<1:
+            is_valid = False
+            flash("you must select age", "age")
+        if len(data['transmission'])<1:
+            is_valid = False
+            flash("you must select transmission", "transmission")
+        if len(data['fuel_type'])<1:
+            is_valid = False
+            flash("you must select fuel type", "fuel_type")	
+        if len(data['power'])<1:
+            is_valid = False
+            flash("you must select power", "power")
+        if len(data['seats'])<1:
+            is_valid = False
+            flash("you must select seats", "seats")
+        if len(data['vehicle_name'])<4:
+            is_valid = False
+            flash("you must select vehicle name", "vehicle_name")
+        if len(data['description'])<1:
+            is_valid = False
+            flash("you must select description", "description")
+        if len(data['photos'])<1:
+            is_valid = False
+            flash("you must select photo", "photos")
+        if len(data['start_price'])<1:
+            is_valid = False
+            flash("you must select start price", "start_price")
+        if len(data['auction_start_date'])=="":
+            is_valid = False
+            flash("you must select auction start date", "auction_start_date")
+        if len(data['auction_last_date'])==0:
+            is_valid = False
+            flash("you must select auction last date", "auction_last_date")
+        return is_valid
+
+
 
 
