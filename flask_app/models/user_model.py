@@ -15,6 +15,7 @@ class User:
         self.password = data['password']
         self.created_at=data['created_at']
         self.updated_at=data['updated_at']
+        self.favourite_vehicles=[]
 
     @classmethod #register an account
     def register(cls, data):
@@ -55,11 +56,11 @@ class User:
                 """
         results = connectToMySQL(DB).query_db(query,data)
 
-        author = cls(results[0])
+        user = cls(results[0])
         print("**************",results,"********************")
         for row in results:
-            """ if row['authors.id'] == None:
-                break """
+            if row['authors.id'] == None:
+                break
             data = {
                     "id":row["vehicles.id"],
                     "admin_id":row["admin_id"],
@@ -79,11 +80,20 @@ class User:
                     "created_at":row["created_at"],
                     "uptated_at":data["uptated_at"]
             }
-            user.favourite_vehicle.append(vehicle_model.Vehicle(data))
+            user.favourite_vehicles.append(vehicle_model.Vehicle(data))
             print("************111**",user,"********************")
-        return author
+        return user
 
 
+
+    @classmethod
+    def unfavorited_authors(cls,data):
+        query = "SELECT * FROM users WHERE users.id NOT IN ( SELECT user_id FROM favourites WHERE vehicle_id = %(id)s );"
+        users = []
+        results = connectToMySQL(DB).query_db(query,data)
+        for row in results:
+            users.append(cls(row))
+        return users
 
 
     @staticmethod

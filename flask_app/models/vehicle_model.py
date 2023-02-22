@@ -1,5 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
+from flask_app.models import user_model
 from flask_app import DB
 class Vehicle:
     def __init__(self,data):
@@ -20,6 +21,7 @@ class Vehicle:
         self.auction_last_date=data["auction_last_date"]
         self.created_at=data["created_at"]
         self.uptated_at=data["uptated_at"]
+        self.users_who_favorited=[]
     @classmethod
     def save_vehicle(cls,data):
         query="""
@@ -39,5 +41,43 @@ class Vehicle:
     def delete(cls, data):
         query = """DELETE FROM vehicles WHERE id = %(id)s;"""
         return connectToMySQL(DB).query_db(query,data)
+    
+    @classmethod
+    def unfavorited_vehicles(cls,data):
+        query = "SELECT * FROM vehicles WHERE vehicles.id NOT IN ( SELECT vehicle_id FROM favourites WHERE user_id = %(id)s );"
+        results = connectToMySQL(DB).query_db(query,data)
+        vehicles = []
+        for row in results:
+            vehicles.append(cls(row))
+        print(vehicles)
+        return vehicles
+    
+    @classmethod
+    def get_by_id(cls,data):
+        query = """SELECT * FROM vehicles 
+        LEFT JOIN favourites ON vehicles.id = favourites.vehicle_id 
+        LEFT JOIN users ON users.id = favourites.user_id 
+        WHERE vehicles.id = %(id)s;"""
+        
+        results = connectToMySQL(DB).query_db(query,data)
+
+        vehicle = cls(results[0])
+
+        for row in results:
+            """ if row['authors.id'] == None:
+                break """
+            data = {
+                "id": row['users.id'],
+                "first_name": row['first_name'],
+                "last_name": row['last_name'],
+                "cin": row['cin'],
+                "password": row['password'],
+                "role": row['role'],
+                "created_at": row['authors.created_at'],
+                "updated_at": row['authors.updated_at']
+            }
+            vehicle.users_who_favorited.append(user_model.User(data))
+        return vehicle
+    
     
 
