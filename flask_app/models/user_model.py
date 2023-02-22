@@ -93,7 +93,6 @@ class User:
         return user
 
 
-
     @classmethod
     def unfavorited_authors(cls,data):
         query = "SELECT * FROM users WHERE users.id NOT IN ( SELECT user_id FROM favourites WHERE vehicle_id = %(id)s );"
