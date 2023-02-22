@@ -23,7 +23,7 @@ class Vehicle:
     @classmethod
     def save_vehicle(cls,data):
         query="""
-        INSERT INTO vehicles (admin_id,prodect_type,mileage,age,transmission,fuel_type,power,seats,vehicle_name,
+        INSERT INTO vehicles (admin_id,product_type,mileage,age,transmission,fuel_type,power,seats,vehicle_name,
         description,photos,start_price,auction_start_date,auction_last_date)
         VALUES (%(admin_id)s,%(prodect_type)s,%(mileage)s,%(age)s,%(transmission)s,%(fuel_type)s,%(power)s,%(seats)s,%(vehicle_name)s
         ,%(description)s,%(photos)s,%(start_price)s,%(auction_start_date)s,%(auction_last_date)s) ; 
