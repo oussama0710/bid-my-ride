@@ -42,6 +42,13 @@
                         {% endfor %}
                     </div>
                     <div class="mb-3">
+                        <label for="cin" class="form-label">CIN</label>
+                        <input type="text" class="form-control" id="cin" name="cin">
+                        {% for message in get_flashed_messages(category_filter=["cin"]) %} 
+                        <p class="text-danger">{{message}}</p>                   
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password">
                         {% for message in get_flashed_messages(category_filter=["password"]) %} 
