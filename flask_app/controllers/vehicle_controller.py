@@ -19,6 +19,6 @@ def add_vehicle():
     }
     Vehicle.save_vehicle(data)
     return redirect('/')
-@app.route('/show/vehicle/<int:id>')
-def new_vehicle(id):
-    pass
+# @app.route('/show/vehicle/<int:id>')
+# def new_vehicle(id):
+#     pass
