@@ -3,19 +3,22 @@ from flask import render_template, request, redirect, session, flash
 from flask_app.models.user_model import User
 from flask_app.models.vehicle_model import Vehicle
 #=============DISPLAY ROUTE==============================
-@app.route('/products/new')
-def new_product():
+@app.route('/vehicle/new')
+def new_vehicle():
     if 'user_id' not in session :#=================bch tekml problem BD(and usere.role)==============
         return redirect('/')
-    return render_template('add_product.html')
+    return render_template('add_vehicle.html')
 #============================ACTION ROUTE================================
-@app.route('/products/add', methods=['POST'])
-def add_product():
+@app.route('/vehicles/add', methods=['POST'])
+def add_vehicle():
     if not Vehicle.validate_vehicle(request.form):
-        return redirect('/product/new')
+        return redirect('/vehicle/new')
     data = {
         **request.form,
         'user_id': session['user_id']#=================bch tekml problem BD(and usere.role)==============
     }
     Vehicle.save_vehicle(data)
     return redirect('/')
+@app.route('/show/vehicle/<int:id>')
+def new_vehicle(id):
+    pass
