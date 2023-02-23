@@ -19,6 +19,11 @@ def add_vehicle():
     }
     Vehicle.save_vehicle(data)
     return redirect('/')
-@app.route('/show/vehicle/<int:id>')
+""" @app.route('/show/vehicle/<int:id>')
 def new_vehicle(id):
-    pass
+    return(render_template('vehicle.html')) """
+@app.route('/show/result')
+def show_result():
+    all_vehicles = Vehicle.get_result()
+    vehicles=Vehicle.get_all()
+    return render_template('results.html',all_vehicles=all_vehicles,vehicles=vehicles)

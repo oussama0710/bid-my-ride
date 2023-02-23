@@ -33,7 +33,13 @@ class Vehicle:
         return connectToMySQL(DB).query_db(query,data)
     @classmethod
     def get_all(cls):
-        query = """SELECT * FROM vehicles WHERE product_type=%(prodect_type)s AND make=%(make)s AND price=%(start_price)s
+        query = """SELECT * FROM vehicles;"""
+        return connectToMySQL(DB).query_db(query)
+    @classmethod
+    def get_result(cls):
+        query = """SELECT * FROM vehicles 
+        WHERE product_type=%(vehicle_type)s 
+        AND make=%(make)s
         ORDER BY start_price %(order)s ;
         """
         return connectToMySQL(DB).query_db(query)
